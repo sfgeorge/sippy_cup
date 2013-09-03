@@ -148,6 +148,8 @@ Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/re
 #### Interaction Commands
 * `send_digits <string>` Send a DTMF string. May send one or many digits, including `0-9`, `*`, `#`, and `A-D`
 * `sleep <seconds>` Wait a specified number of seconds
+
+#### Transfer Commands
 * `receive_refer` Expect to receive a `REFER` from the target
 * `ack_refer` Send an ACK in response to a `REFER`
 * `notify_refer_ringing` Send a `NOTIFY` with a sipfrag of `180 Ringing`
