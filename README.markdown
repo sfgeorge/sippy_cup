@@ -157,6 +157,11 @@ Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/re
 * `send_digits <string>` Send a DTMF string. May send one or many digits, including `0-9`, `*`, `#`, and `A-D`
 * `receive_ok` Expect to receive a `200 OK`
 * `receive_message [regex]` Expect to receive a SIP MESSAGE, optionally matching a regex
+* `receive_refer` Expect to receive a `REFER` from the target
+* `ack_refer` Send an ACK in response to a `REFER`
+* `notify_refer_ringing` Send a `NOTIFY` with a sipfrag of `180 Ringing`
+* `notify_refer_ok` Send a `NOTIFY` with a sipfrag of `200 OK`
+* `wait_for_refer` Convenient shortcut for `receive_refer; ack_refer; notify_refer_ringing; receive_answer; notify_refer_ok; receive_answer`
 * `send_bye` Send a `BYE` (hangup request)
 * `receive_bye` Expect to receive a `BYE` from the target
 * `ack_bye` Send a `200 OK` response to a `BYE`

@@ -711,6 +711,80 @@ Content-Length: 0
       scenario_filename
     end
 
+    ##
+    # Shortcut method that tells SIPp to receive and accept a REFER
+    def wait_for_refer(opts = {})
+      rrs = opts.delete :rrs
+      rrs = false if rrs.nil?
+      receive_refer(opts)
+      ack_refer(opts)
+      notify_refer_ringing(opts)
+      receive_200(opts.merge :rrs => rrs)
+      notify_refer_ok(opts)
+      receive_200(opts.merge :rrs => rrs)
+    end
+
+    def receive_refer(opts = {})
+      @scenario << new_recv(opts.merge request: 'REFER')
+    end
+
+    def ack_refer(opts = {})
+      msg = <<-ACK
+
+        SIP/2.0 202 Accepted
+        Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+        [last_From:]
+        [last_To:]
+        [last_Call-ID:]
+        [last_CSeq:]
+        Contact: <sip:#{@from_user}@[local_ip]:[local_port];transport=[transport]>
+        Max-Forwards: 100
+        Content-Length: 0
+        [routes]
+      ACK
+      @scenario << new_send(msg, opts)
+    end
+
+    def notify_refer_ringing(opts = {})
+      opts.merge! :body => 'SIP/2.0 180 Ringing',
+        :state => 'active'
+      notify_refer(opts)
+    end
+
+    def notify_refer_ok(opts = {})
+      opts.merge! :body => 'SIP/2.0 200 OK',
+        :state => 'terminated;reason=noresource'
+      notify_refer(opts)
+    end
+
+    def notify_refer(opts = {})
+      # @TODO The Event: field MUST contain an ID if multiple REFERs are issued
+      # @see http://tools.ietf.org/html/rfc3515#section-2.4.6
+      body = opts.delete(:body) || (raise ArgumentError,
+        'Each NOTIFY must include a body of type of type "message/sipfrag"')
+      state = opts.delete(:state) || (raise ArgumentError,
+        'Each NOTIFY must contain a Subscription-State')
+      msg = <<-HEREDOC
+
+        NOTIFY [next_url] SIP/2.0
+        Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+        From: "#{@from_user}" <sip:#{@from_user}@[local_ip]>;tag=[call_number]
+        To: <sip:[service]@[remote_ip]:[remote_port]>[peer_tag_param]
+        [last_Call-ID:]
+        CSeq: [cseq] NOTIFY
+        Event: refer
+        Subscription-state: #{state}
+        Content-Type: message/sipfrag;version=2.0
+        Contact: <sip:#{@from_user}@[local_ip]:[local_port];transport=[transport]>
+        Max-Forwards: 100
+        Content-Length: [len]
+        [routes]
+
+        #{body}
+      HEREDOC
+      @scenario << new_send(msg, opts)
+    end
+
     #
     # Write compiled Scenario XML and PCAP media (if applicable) to tempfiles.
     #
