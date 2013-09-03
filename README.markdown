@@ -160,6 +160,8 @@ Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/re
 * `sleep <seconds>` Wait a specified number of seconds
 * `receive_ok` Expect to receive a `200 OK`
 * `receive_message [regex]` Expect to receive a SIP MESSAGE, optionally matching a regex
+
+#### Transfer Commands
 * `receive_refer` Expect to receive a `REFER` from the target
 * `ack_refer` Send an ACK in response to a `REFER`
 * `notify_refer_ringing` Send a `NOTIFY` with a sipfrag of `180 Ringing`
