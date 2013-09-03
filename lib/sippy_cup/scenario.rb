@@ -59,11 +59,11 @@ module SippyCup
 
         INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
         Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-        From: sipp <sip:#{@from_user}@[local_ip]>;tag=[call_number]
+        From: "#{@from_user}" <sip:#{@from_user}@[local_ip]>;tag=[call_number]
         To: <sip:[service]@[remote_ip]:[remote_port]>
         Call-ID: [call_id]
         CSeq: [cseq] INVITE
-        Contact: sip:#{@from_user}@[local_ip]:[local_port]
+        Contact: <sip:#{@from_user}@[local_ip]:[local_port];transport=[transport]>
         Max-Forwards: 100
         Content-Type: application/sdp
         Content-Length: [len]
@@ -127,14 +127,14 @@ module SippyCup
 
         ACK [next_url] SIP/2.0
         Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-        From: <sip:#{@from_user}@[local_ip]>;tag=[call_number]
+        From: "#{@from_user}" <sip:#{@from_user}@[local_ip]>;tag=[call_number]
         [last_To:]
-        [routes]
         Call-ID: [call_id]
         CSeq: [cseq] ACK
-        Contact: sip:#{@from_user}@[local_ip]:[local_port]
+        Contact: <sip:#{@from_user}@[local_ip]:[local_port];transport=[transport]>
         Max-Forwards: 100
         Content-Length: 0
+        [routes]
       ACK
       @scenario << new_send(msg, opts)
       start_media
@@ -167,15 +167,16 @@ module SippyCup
     def send_bye(opts = {})
       msg = <<-MSG
 
-        BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+        BYE [next_url] SIP/2.0
         [last_Via:]
-        [last_From:]
+        From: "#{@from_user}" <sip:#{@from_user}@[local_ip]>;tag=[call_number]
         [last_To:]
         [last_Call-ID]
         CSeq: [cseq] BYE
-        Contact: <sip:[local_ip]:[local_port];transport=[transport]>
+        Contact: <sip:#{@from_user}@[local_ip]:[local_port];transport=[transport]>
         Max-Forwards: 100
         Content-Length: 0
+        [routes]
       MSG
       @scenario << new_send(msg, opts)
     end
@@ -200,12 +201,12 @@ module SippyCup
         [last_Via:]
         [last_From:]
         [last_To:]
-        [routes]
         [last_Call-ID:]
         [last_CSeq:]
-        Contact: <sip:[local_ip]:[local_port];transport=[transport]>
+        Contact: <sip:#{@from_user}@[local_ip]:[local_port];transport=[transport]>
         Max-Forwards: 100
         Content-Length: 0
+        [routes]
       ACK
       @scenario << new_send(msg, opts)
     end
