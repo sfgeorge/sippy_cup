@@ -136,7 +136,7 @@ And finally running `rake sippy_cup:run[sippy_cup.yml]` to execute the scenario.
 
 Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/reference.html) as optional arguments.
 
-* `sleep <seconds>` Wait a specified number of seconds
+#### Initiation Commands
 * `invite` Send a SIP INVITE to the specified target
 * `receive_trying` Expect to receive a `100 Trying` response from the target
 * `receive_ringing` Expect to receive a `180 Ringing` response from the target
@@ -144,12 +144,17 @@ Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/re
 * `receive_answer` Expect to receive a `200 OK` (answering the call) response from the target
 * `wait_for_answer` Convenient shortcut for `receive_trying; receive_ringing; receive_progress; receive_answer`, with all but the `answer` marked as optional
 * `ack_answer` Send an `ACK` in response to a `200 OK`
+
+#### Interaction Commands
 * `send_digits <string>` Send a DTMF string. May send one or many digits, including `0-9`, `*`, `#`, and `A-D`
+* `sleep <seconds>` Wait a specified number of seconds
 * `receive_refer` Expect to receive a `REFER` from the target
 * `ack_refer` Send an ACK in response to a `REFER`
 * `notify_refer_ringing` Send a `NOTIFY` with a sipfrag of `180 Ringing`
 * `notify_refer_ok` Send a `NOTIFY` with a sipfrag of `200 OK`
 * `wait_for_refer` Convenient shortcut for `receive_refer; ack_refer; notify_refer_ringing; receive_answer; notify_refer_ok; receive_answer`
+
+#### Teardown Commands
 * `send_bye` Send a `BYE` (hangup request)
 * `receive_bye` Expect to receive a `BYE` from the target
 * `ack_bye` Send a `200 OK` response to a `BYE`
