@@ -139,7 +139,7 @@ The above code can be executed as a standalone Ruby script and the resulting sce
 
 Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/reference.html) as optional arguments. For a full list of available steps with arguments explained, see the [API documentation](http://rubydoc.info/gems/sippy_cup/SippyCup/Scenario).
 
-* `sleep <seconds>` Wait a specified number of seconds
+#### Initiation Commands
 * `invite` Send a SIP INVITE to the specified target
 * `receive_invite` Wait for an INVITE to be received
 * `register <username> [password]` Register the specified user to the target with an optional password
@@ -154,7 +154,10 @@ Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/re
 * `wait_for_answer` Convenient shortcut for `receive_trying; receive_ringing; receive_progress; receive_answer`, with all but the `answer` marked as optional
 * `ack_answer` Send an `ACK` in response to a `200 OK`
 * `receive_ack` Expect to receive an `ACK`
+
+#### Interaction Commands
 * `send_digits <string>` Send a DTMF string. May send one or many digits, including `0-9`, `*`, `#`, and `A-D`
+* `sleep <seconds>` Wait a specified number of seconds
 * `receive_ok` Expect to receive a `200 OK`
 * `receive_message [regex]` Expect to receive a SIP MESSAGE, optionally matching a regex
 * `receive_refer` Expect to receive a `REFER` from the target
@@ -162,6 +165,8 @@ Each command below can take [SIPp attributes](http://sipp.sourceforge.net/doc/re
 * `notify_refer_ringing` Send a `NOTIFY` with a sipfrag of `180 Ringing`
 * `notify_refer_ok` Send a `NOTIFY` with a sipfrag of `200 OK`
 * `wait_for_refer` Convenient shortcut for `receive_refer; ack_refer; notify_refer_ringing; receive_answer; notify_refer_ok; receive_answer`
+
+#### Teardown Commands
 * `send_bye` Send a `BYE` (hangup request)
 * `receive_bye` Expect to receive a `BYE` from the target
 * `ack_bye` Send a `200 OK` response to a `BYE`
