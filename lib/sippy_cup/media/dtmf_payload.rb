@@ -24,7 +24,7 @@ module SippyCup
         if bool
           @flags |= END_OF_EVENT
         else
-          @flags &= (0xf - END_OF_EVENT)
+          @flags &= ~END_OF_EVENT
         end
       end
 
