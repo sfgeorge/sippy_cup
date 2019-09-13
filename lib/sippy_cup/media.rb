@@ -30,10 +30,10 @@ module SippyCup
     end
 
     def compile!
-      sequence_number = 0
+      sequence_number = rand 2.pow 16
       start_time = Time.now
       @pcap_file = PacketFu::PcapFile.new
-      timestamp = 0
+      timestamp = rand 2.pow 32
       elapsed = 0
       ssrc_id = rand 2.pow 31
 
