@@ -67,7 +67,6 @@ module SippyCup
           count = (250 / DTMFPayload::PTIME) + 1
           count.times do |i|
             packet = new_packet
-            elapsed += DTMFPayload::PTIME
             dtmf_frame = DTMFPayload.new value
             dtmf_frame.rtp_marker = 1 if i == 0
             dtmf_frame.index = i
@@ -79,6 +78,7 @@ module SippyCup
             # during transmission
             repititions = dtmf_frame.end_of_event ? 3 : 1
             repititions.times do
+              elapsed += DTMFPayload::PTIME
               dtmf_frame.rtp_sequence_num = sequence_number += 1
               packet.headers.last.body = dtmf_frame.to_bytes
               packet.recalc
