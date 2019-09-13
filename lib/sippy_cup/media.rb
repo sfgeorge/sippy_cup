@@ -36,7 +36,6 @@ module SippyCup
       timestamp = 0
       elapsed = 0
       ssrc_id = rand 2147483648
-      first_audio = true
 
       @sequence.each do |input|
         action, value = get_step input
@@ -45,15 +44,12 @@ module SippyCup
         when 'silence'
           # value is the duration in milliseconds
           # append that many milliseconds of silent RTP audio
-          (value.to_i / @generator::PTIME).times do
+          (value.to_i / @generator::PTIME).times do |i|
             packet = new_packet
             rtp_frame = @generator.new
 
-            # The first RTP audio packet should have the marker bit set
-            if first_audio
-              rtp_frame.rtp_marker = 1
-              first_audio = false
-            end
+            # The first RTP audio packet of a spurt of "audio" should have the marker bit set
+            rtp_frame.rtp_marker = 1 if i == 0
 
             rtp_frame.rtp_timestamp = timestamp += rtp_frame.timestamp_interval
             elapsed += rtp_frame.ptime
