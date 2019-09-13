@@ -9,13 +9,12 @@ module SippyCup
       TIMESTAMP_INTERVAL = 160
       END_OF_EVENT = 1 << 7
       DTMF = %w{0 1 2 3 4 5 6 7 8 9 * # A B C D}.freeze
-      attr_accessor :ptime, :index
+      attr_accessor :index
 
       def initialize(digit, opts = {})
         super RTP_PAYLOAD_ID
         @flags = 0
         @digit = atoi digit
-        @ptime = opts[:ptime] || PTIME
 
         volume opts[:volume] || 10
       end
