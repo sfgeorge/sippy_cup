@@ -60,6 +60,7 @@ module SippyCup
             @pcap_file.body << get_pcap_packet(packet, next_ts(start_time, elapsed))
           end
         when 'dtmf'
+          timestamp += DTMFPayload::TIMESTAMP_INTERVAL
           # value is the DTMF digit to send
           # append that RFC2833 digit
           # Assume 0.25 second duration for now
@@ -70,8 +71,7 @@ module SippyCup
             dtmf_frame = DTMFPayload.new value
             dtmf_frame.rtp_marker = 1 if i == 0
             dtmf_frame.index = i
-            dtmf_frame.rtp_timestamp = timestamp # Is this correct? This is what Blink does...
-            #dtmf_frame.rtp_timestamp = timestamp += dtmf_frame.timestamp_interval
+            dtmf_frame.rtp_timestamp = timestamp
             dtmf_frame.rtp_ssrc_id = ssrc_id
             dtmf_frame.end_of_event = ((count-1) == i) # Last packet?
 
