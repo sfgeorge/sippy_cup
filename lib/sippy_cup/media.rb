@@ -35,7 +35,7 @@ module SippyCup
       @pcap_file = PacketFu::PcapFile.new
       timestamp = 0
       elapsed = 0
-      ssrc_id = rand 2147483648
+      ssrc_id = rand 2.pow 31
 
       @sequence.each do |input|
         action, value = get_step input
